@@ -1,4 +1,4 @@
-import React from "react";
+import "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";

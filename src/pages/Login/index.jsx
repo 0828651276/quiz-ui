@@ -6,7 +6,7 @@ import {
     FormLabel, Link, TextField, Typography, Stack, Divider, Card as MuiCard
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import axios from 'axios';  // 🔥 Import axios để gọi API
+import axios from 'axios';
 import AppTheme from '../../template/shared-theme/AppTheme';
 import ColorModeSelect from '../../template/shared-theme/ColorModeSelect';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcon/CustomIcons.jsx';
@@ -27,15 +27,11 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-    height: '100vh',
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4),
-    },
+    minHeight: '100vh',
+    overflowY: 'auto',
 }));
 
-// ✅ Validation schema (Dùng username thay vì email)
+
 const SignInSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
     password: Yup.string().required('Password is required'),
@@ -43,24 +39,23 @@ const SignInSchema = Yup.object().shape({
 
 export default function Login(props) {
     const [open, setOpen] = React.useState(false);
-    const [error, setError] = React.useState("");  // 🔥 Lưu lỗi từ API
+    const [error, setError] = React.useState("");
 
     const formLogin = useFormik({
-        initialValues: { username: '', password: '' },  // ✅ Dùng username thay vì email
+        initialValues: { username: '', password: '' },
         validationSchema: SignInSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            setError("");  // Xóa lỗi trước khi gửi request
+            setError("");
             try {
-                const response = await axios.post("http://localhost:8080/api/user/login", values);  // ✅ Đúng API backend
+                const response = await axios.post("http://localhost:8080/api/user/login", values);
 
-                // ✅ Lưu user vào localStorage
                 localStorage.setItem("user", JSON.stringify(response.data));
 
                 console.log("Login successful:", response.data);
-                window.location.href = "/home";  // Chuyển hướng sau khi đăng nhập
+                window.location.href = "/home";
             } catch (err) {
                 console.error("Login error:", err);
-                setError("Invalid username or password");  // ✅ Hiển thị lỗi
+                setError("Invalid username or password");
             } finally {
                 setSubmitting(false);
             }
@@ -79,7 +74,7 @@ export default function Login(props) {
                     </Typography>
                     <Box component="form" onSubmit={formLogin.handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <FormControl>
-                            <FormLabel>Username</FormLabel>  {/* ✅ Đổi "Email" thành "Username" */}
+                            <FormLabel>Username</FormLabel>
                             <TextField
                                 id="username"
                                 name="username"
@@ -117,7 +112,6 @@ export default function Login(props) {
                             label="Remember me"
                         />
 
-                        {/* ✅ Hiển thị lỗi nếu có */}
                         {error && (
                             <Typography color="error" sx={{ textAlign: "center" }}>
                                 {error}
@@ -133,24 +127,34 @@ export default function Login(props) {
                         >
                             {formLogin.isSubmitting ? "Signing in..." : "Sign in"}
                         </Button>
+
                         <Link component="button" type="button" onClick={() => setOpen(true)} variant="body2" sx={{ alignSelf: 'center' }}>
                             Forgot your password?
                         </Link>
                     </Box>
-                    <Divider>or</Divider>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+                        <Divider>or</Divider>
                         <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}>
                             Sign in with Google
                         </Button>
                         <Button fullWidth variant="outlined" startIcon={<FacebookIcon />}>
                             Sign in with Facebook
                         </Button>
-                        <Typography sx={{ textAlign: 'center' }}>
-                            Don&apos;t have an account?{' '}
-                            <Link href="/sign-up" variant="body2">
-                                Sign up
-                            </Link>
+                    </Box>
+
+                    {/* ✅ Đưa nút Sign up xuống cuối */}
+                    <Box sx={{ mt: 3 }}>
+                        <Typography variant="body2" color="text.secondary">
+                            You don't have an account?
                         </Typography>
+                        <Button
+                            fullWidth
+                            variant="outlined"
+                            onClick={() => window.location.href = "/register"}
+                        >
+                            Sign up
+                        </Button>
                     </Box>
                 </Card>
             </SignInContainer>

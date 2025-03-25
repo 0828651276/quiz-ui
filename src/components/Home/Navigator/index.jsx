@@ -19,7 +19,7 @@ const categories = [
                 id: 'Dashboard',
                 icon: <PeopleIcon/>,
                 active: false,
-                url: '/home/dashboard'
+                url: '/home/quizzes'
             },
             {
                 id: 'Book Manager',
