@@ -16,17 +16,23 @@ const categories = [
         id: 'Build',
         children: [
             {
-                id: 'Dashboard',
+                id: 'Danh Sách Người Dùng',
                 icon: <PeopleIcon/>,
                 active: false,
                 url: '/home/dashboard'
             },
             {
-                id: 'Book Manager',
+                id: 'Danh Sách Bài Tập',
                 icon: <DnsRoundedIcon/>,
                 active: false,
                 url: '/home/books'
             },
+            {
+                id: 'Danh Sách Câu Hỏi',
+                icon: <DnsRoundedIcon/>,
+                active: false,
+                url: '/home/questions'
+            }
 
         ],
     }
